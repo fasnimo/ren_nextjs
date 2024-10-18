@@ -1,4 +1,5 @@
 import "./globals.css";
+import NavBar from '@/components/NavBar';
 import type { Metadata } from "next";
 import {Inconsolata} from 'next/font/google';
 
@@ -17,8 +18,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={inconsolata.className}>
+      <body className={inconsolata.className}>
+        <NavBar />
         <main className="max-w-3xl mx-auto py-10">{children}</main>
       </body>
     </html>
