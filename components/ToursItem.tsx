@@ -1,14 +1,6 @@
 'use client'
 import React from 'react';
 
-type Tour = {
-    id: string;
-    name: string;
-    info: string;
-    image: string;
-    price: string;
-};
-
 interface ToursItemProps{
     tourName: string;
     tourImage: string;
