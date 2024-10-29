@@ -1,5 +1,6 @@
 'use client'
 import ToursItem from '@/components/ToursItem';
+import ToursList from '@/components/ToursList';
 import { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 
@@ -55,18 +56,27 @@ const ToursItemPage = ({ params }: { params: Params }) => {
       }
     };
 
+    const handleSelectTour = (tourId: string) => {
+      router.push(`/tours/${tourId}`);
+    };
+
     if (!tour) return <div>Loading...</div>;
 
     return (
         <div>
-            <ToursItem
-                tourName={tour.name}
-                tourImage={tour.image}
-                tourInfo={tour.info}
-                tourPrice={tour.price}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-            />
+          {/* This needs to be reworked to show the list with out the deleted one. */}
+          {!tour && <ToursList toursData={tours} onClickHandler={handleSelectTour} />}
+          {/* <ToursList toursData={tours} onClickHandler={handleSelectTour} /> */}
+          {tour && (
+                <ToursItem
+                    tourName={tour.name}
+                    tourImage={tour.image}
+                    tourInfo={tour.info}
+                    tourPrice={tour.price}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                />
+            )}
             {/* <h1>{tour.name}</h1>
             <img src={tour.image} alt={tour.name} />
             <p>{tour.info}</p>

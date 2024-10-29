@@ -13,12 +13,18 @@ interface ToursListProps{
 async function ToursList({toursData, onClickHandler}:ToursListProps) {
  
     return (
-      <section>
-          {toursData.map((tour) => {
-              return <h2 onClick={() => onClickHandler(tour.id)} key={tour.id}>{tour.name}</h2>
-          })}
-      </section>
-    )
+        <section>
+            {toursData.map((tour) => (
+                <h2 
+                    key={tour.id} 
+                    onClick={() => onClickHandler(tour.id)} // Passes tour.id to onClickHandler, which will be handleSelectTour
+                    style={{ cursor: 'pointer' }}
+                >
+                    {tour.name}
+                </h2>
+            ))}
+        </section>
+    );
   }
   
   export default ToursList
