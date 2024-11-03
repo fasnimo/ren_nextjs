@@ -4,7 +4,6 @@ import { useState } from 'react';
 
 function Form() {
     const [formSuccess, setFormSuccess] = useState(false)
-    //const [formSuccessMessage, setFormSuccessMessage] = useState("")
     const [formData, setFormData] = useState({
         name: "",
         email: "",
