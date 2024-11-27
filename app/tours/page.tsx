@@ -3,14 +3,17 @@ import { useState, useEffect } from "react";
 import ToursList from "@/components/ToursList";
 import { useRouter } from "next/navigation";
 
-const url = 'https://www.course-api.com/react-tours-project';
+// const url = 'https://www.course-api.com/react-tours-project';
+const url = 'http://localhost:3001/api/tours'
 
+// error? means error is optional
 type Tour = {
     id: string;
     name: string;
     info: string;
     image: string;
     price: string;
+    error?: string;
 };
 
 async function ToursPage() {
@@ -33,7 +36,10 @@ async function ToursPage() {
     return (
         <section>
             <h1 className="text-3xl mb-4">Tours</h1>
-            <ToursList toursData={data} onClickHandler={handleOnClick} />
+            {
+            (data.length > 0) ?
+            <ToursList toursData={data} onClickHandler={handleOnClick} />  : <div>{data.error}</div>
+            }
         </section>
     );
 }

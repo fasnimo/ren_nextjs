@@ -21,23 +21,24 @@ const ToursItemPage = ({ params }: { params: Params }) => {
     const { id } = params;
     const [tour, setTour] = useState<Tour | null>(null);
     const [tours, setTours] = useState<Tour[]>([]);
+    
+    const fetchTours = async () => {
+        const response = await fetch(`http://localhost:3001/api/tour/${id}`);
+        const toursData: Tour = await response.json();
+        // setTours(toursData);
+        setTour(toursData || null);
+    };
 
     useEffect(() => {
-        const fetchTours = async () => {
-            const response = await fetch('https://www.course-api.com/react-tours-project');
-            const toursData: Tour[] = await response.json();
-            setTours(toursData);
-        };
-
         fetchTours();
     }, []);
 
-    useEffect(() => {
-        if (tours.length > 0) {
-            const foundTour = tours.find(tour => tour.id === id);
-            setTour(foundTour || null); // Set found tour or null if not found
-        }
-    }, [tours, id]);
+    // useEffect(() => {
+    //     if (tours.length > 0) {
+    //         const foundTour = tours.find(tour => tour.id === id);
+    //         setTour(foundTour || null); // Set found tour or null if not found
+    //     }
+    // }, [tours, id]);
 
     const handleEdit = () => {
       console.log(`Editing tour with ID: ${id}`);
