@@ -23,7 +23,7 @@ const ToursItemPage = ({ params }: { params: Params }) => {
     const [tours, setTours] = useState<Tour[]>([]);
     
     const fetchTours = async () => {
-        const response = await fetch(`http://localhost:3001/api/tour/${id}`);
+        const response = await fetch(`http://localhost:3001/api/tours/${id}`);
         const toursData: Tour = await response.json();
         // setTours(toursData);
         setTour(toursData || null);
