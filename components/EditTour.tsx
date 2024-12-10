@@ -13,28 +13,79 @@ type Tour = {
 
 const EditTour = ({ tourData }: { tourData: Tour }) => {
   const router = useRouter();
-  const [tour, setTour] = useState<Tour>(tourData);
+  const [tour, setTour] = useState<Tour | null>(tourData);  // Allow `null` in state
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false); // Loading state
-  const [success, setSuccess] = useState<boolean>(false); // Success state
-  
+  const [loading, setLoading] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  //   const { name, value } = e.target;
+  //   setTour((prevTour) => prevTour ? { ...prevTour, [name]: value } : null);
+  // };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setTour({ ...tour, [name]: value });
+    console.log(`Changing field: ${name}, New value: ${value}`); // Debugging log to see input values
+    setTour((prevTour) => prevTour ? { ...prevTour, [name]: value } : null);
   };
+  
+
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (!tour) return;  // Early return if tour is null
+
+  //   setLoading(true);
+  //   setError(null);
+  //   setSuccess(false);
+
+  //   if (!tour.id) {
+  //       setError('Tour ID is missing!');
+  //       setLoading(false);
+  //       return;
+  //   }
+
+  //   try {
+  //     const response = await fetch(`http://localhost:3001/api/tours/${tour.id}`, {
+  //       method: 'PUT',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(tour),
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error('Failed to update the tour');
+  //     }
+
+  //     const updatedTour = await response.json();
+  //     setSuccess(true);
+  //     router.push(`/tours/${tour.id}`);
+  //   } catch (err) {
+  //     setError(err instanceof Error ? err.message : 'Unknown error');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);  // Start loading
-    setError(null);    // Reset error
-    setSuccess(false); // Reset success message
-
-    if (!tour.id) {
-        setError('Tour ID is missing!');
-        setLoading(false);
-        return;
+    console.log('Form submitted!'); // Debugging log to see if the form is being submitted
+  
+    if (!tour) {
+      console.error('Tour data is missing');
+      return;
     }
-
+  
+    if (!tour.id) {
+      setError('Tour ID is missing!');
+      return;
+    }
+  
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+  
     try {
       const response = await fetch(`http://localhost:3001/api/tours/${tour.id}`, {
         method: 'PUT',
@@ -43,26 +94,30 @@ const EditTour = ({ tourData }: { tourData: Tour }) => {
         },
         body: JSON.stringify(tour),
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to update the tour');
       }
-
+  
       const updatedTour = await response.json();
-      setSuccess(true); // Set success to true on successful update
-      router.push(`/tours/${tour.id}`); // Redirect after successful update
+      console.log('Tour updated:', updatedTour); // Debugging log to see if the response is valid
+      setSuccess(true);
+      router.push(`/tours/${tour.id}`);
     } catch (err) {
+      console.error('Error:', err);
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
+  
+  if (!tour) return <div>Loading...</div>;  // Show loading state if tour is null
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>Edit Tour</h2>
-      {error && <div className="error-message" style={{ color: 'red' }}>{error}</div>}  {/* Show error message */}
-      {success && <div className="success-message" style={{ color: 'green' }}>Tour updated successfully!</div>}  {/* Show success message */}
+      {error && <div className="error-message" style={{ color: 'red' }}>{error}</div>}
+      {success && <div className="success-message" style={{ color: 'green' }}>Tour updated successfully!</div>}
       
       <div>
         <label>
@@ -88,8 +143,9 @@ const EditTour = ({ tourData }: { tourData: Tour }) => {
           <input type="text" name="price" value={tour.price} onChange={handleChange} required />
         </label>
       </div>
-      <button type="submit" disabled={loading}>Save Changes</button>
-      {loading && <div>Saving...</div>}  {/* Show loading indicator */}
+      <button type="submit">Save Changes</button>
+      {/* <button type="submit" disabled={loading}>Save Changes</button> */}
+      {loading && <div>Saving...</div>}
     </form>
   );
 };
