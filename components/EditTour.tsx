@@ -1,7 +1,6 @@
 'use client'
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
 
 type Tour = {
   id: string;
@@ -9,43 +8,36 @@ type Tour = {
   info: string;
   image: string;
   price: string;
-  error: string;
+  error?: string;  // Error can be optional
 };
 
 const EditTour = ({ tourData }: { tourData: Tour }) => {
   const router = useRouter();
   const [tour, setTour] = useState<Tour>(tourData);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false); // Loading state
+  const [success, setSuccess] = useState<boolean>(false); // Success state
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setTour({ ...tour, [name]: value });
   };
 
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-//     // Update the tour data in the backend or state management (API call)
-//     // For now, just log the updated tour
-//     console.log('Updated tour:', tour);
-    
-//     // Redirect to the tour page after editing
-//     router.push(`/tours/${tour.id}`);
-//   };
-
-
-const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Submitting tour:', tour); // Debugging log
+    setLoading(true);  // Start loading
+    setError(null);    // Reset error
+    setSuccess(false); // Reset success message
 
     if (!tour.id) {
         setError('Tour ID is missing!');
+        setLoading(false);
         return;
     }
 
     try {
-      //const response = await fetch(`https://www.course-api.com/react-tours-project/${tour.id}`
       const response = await fetch(`http://localhost:3001/api/tours/${tour.id}`, {
-        method: 'PUT', // or 'PATCH' depending on your API
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -56,21 +48,22 @@ const handleSubmit = async (e: React.FormEvent) => {
         throw new Error('Failed to update the tour');
       }
 
-      // Optionally fetch the updated data
       const updatedTour = await response.json();
-      console.log('Updated tour:', updatedTour);
-
-      // Redirect to the updated tour page
-      router.push(`/tours/${tour.id}`);
+      setSuccess(true); // Set success to true on successful update
+      router.push(`/tours/${tour.id}`); // Redirect after successful update
     } catch (err) {
-    console.error('Error updating tour:', err);
-    setError(err instanceof Error ? err.message : 'Unknown error');
-  }
+      setError(err instanceof Error ? err.message : 'Unknown error');
+    } finally {
+      setLoading(false); // Stop loading
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>Edit Tour</h2>
+      {error && <div className="error-message" style={{ color: 'red' }}>{error}</div>}  {/* Show error message */}
+      {success && <div className="success-message" style={{ color: 'green' }}>Tour updated successfully!</div>}  {/* Show success message */}
+      
       <div>
         <label>
           Name:
@@ -95,7 +88,8 @@ const handleSubmit = async (e: React.FormEvent) => {
           <input type="text" name="price" value={tour.price} onChange={handleChange} required />
         </label>
       </div>
-      <button type="submit">Save Changes</button>
+      <button type="submit" disabled={loading}>Save Changes</button>
+      {loading && <div>Saving...</div>}  {/* Show loading indicator */}
     </form>
   );
 };

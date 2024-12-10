@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 // const url = 'https://www.course-api.com/react-tours-project';
 const url = 'http://localhost:3001/api/tours'
 
-// error? means error is optional
 type Tour = {
     id: string;
     name: string;
@@ -19,12 +18,20 @@ type Tour = {
 async function ToursPage() {
     const router = useRouter();
     const [data, setData] = useState<Tour[]>([]);
+    const [error, setError] = useState<string | null>(null); // New error state
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch(url);
-            const toursData = await response.json();
-            setData(toursData);
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch tours");
+                }
+                const toursData = await response.json();
+                setData(toursData);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : "Unknown error");
+            }
         };
         fetchData();
     }, []);
@@ -36,9 +43,11 @@ async function ToursPage() {
     return (
         <section>
             <h1 className="text-3xl mb-4">Tours</h1>
+            {error && <div className="error-message">{error}</div>} {/* Display error */}
             {
-            (data.length > 0) ?
-            <ToursList toursData={data} onClickHandler={handleOnClick} />  : <div>{data.error}</div>
+                data.length > 0 ?
+                    <ToursList toursData={data} onClickHandler={handleOnClick} /> :
+                    <div>No tours available.</div>
             }
         </section>
     );
