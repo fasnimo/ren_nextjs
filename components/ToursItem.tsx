@@ -19,15 +19,31 @@ const ToursItem = ({
   onDelete,
 }: ToursItemProps) => {
   return (
-    <div style={{ padding: '20px', border: '1px solid #ccc', margin: '10px 0', borderRadius: '8px' }}>
-      <h1>{tourName}</h1>
-      <img src={tourImage} alt={tourName} style={{ width: '100%', height: 'auto', borderRadius: '8px' }} />
-      <p>{tourInfo}</p>
-      <p><strong>Price:</strong> {tourPrice}</p>
+    <div className="p-5 border border-gray-300 rounded-lg shadow-sm mb-4">
+      <h1 className="text-xl font-bold mb-3">{tourName}</h1>
+      <img 
+        src={tourImage} 
+        alt={tourName} 
+        className="w-full h-auto rounded-lg mb-3"
+      />
+      <p className="text-gray-700 mb-3">{tourInfo}</p>
+      <p className="font-semibold text-gray-900">
+        <strong>Price:</strong> {tourPrice}
+      </p>
 
-      <div style={{ marginTop: '10px' }}>
-        <button onClick={onEdit} style={{ padding: '10px 15px', marginRight: '10px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Edit</button>
-        <button onClick={onDelete} style={{ padding: '10px 15px', backgroundColor: '#f44336', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Delete</button>
+      <div className="mt-4 flex space-x-3">
+        <button 
+          onClick={onEdit} 
+          className="px-4 py-2 bg-green-500 text-white rounded-md shadow hover:bg-green-600"
+        >
+          Edit
+        </button>
+        <button 
+          onClick={onDelete} 
+          className="px-4 py-2 bg-red-500 text-white rounded-md shadow hover:bg-red-600"
+        >
+          Delete
+        </button>
       </div>
     </div>
   );

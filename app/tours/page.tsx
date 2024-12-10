@@ -3,8 +3,7 @@ import { useState, useEffect } from "react";
 import ToursList from "@/components/ToursList";
 import { useRouter } from "next/navigation";
 
-// const url = 'https://www.course-api.com/react-tours-project';
-const url = 'http://localhost:3001/api/tours'
+const url = 'http://localhost:3001/api/tours';
 
 type Tour = {
     id: string;
@@ -18,7 +17,7 @@ type Tour = {
 async function ToursPage() {
     const router = useRouter();
     const [data, setData] = useState<Tour[]>([]);
-    const [error, setError] = useState<string | null>(null); // New error state
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -41,13 +40,15 @@ async function ToursPage() {
     };
 
     return (
-        <section>
-            <h1 className="text-3xl mb-4">Tours</h1>
-            {error && <div className="error-message">{error}</div>} {/* Display error */}
+        <section className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-lg">
+            <h1 className="text-3xl font-semibold text-gray-900 mb-4">Tours</h1>
+            {error && <div className="text-red-500 mb-4">{error}</div>}
             {
-                data.length > 0 ?
-                    <ToursList toursData={data} onClickHandler={handleOnClick} /> :
-                    <div>No tours available.</div>
+                data.length > 0 ? (
+                    <ToursList toursData={data} onClickHandler={handleOnClick} />
+                ) : (
+                    <div className="text-gray-600">No tours available.</div>
+                )
             }
         </section>
     );
