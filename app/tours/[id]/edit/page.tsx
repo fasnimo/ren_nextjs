@@ -13,7 +13,9 @@ const EditTourPage = ({ params }: { params: { id: string } }) => {
     useEffect(() => {
         const fetchTour = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/api/tours/${id}`);
+                const response = await fetch(`http://localhost:3001/api/tours/${id}`, {
+                    method: "PUT",
+                  });
                 if (!response.ok) {
                     throw new Error('Failed to fetch tour data');
                 }
