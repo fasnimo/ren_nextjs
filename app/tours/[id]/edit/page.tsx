@@ -13,9 +13,7 @@ const EditTourPage = ({ params }: { params: { id: string } }) => {
     useEffect(() => {
         const fetchTour = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/api/tours/${id}`, {
-                    method: "PUT",
-                  });
+                const response = await fetch(`http://localhost:3001/api/tours/${id}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch tour data');
                 }
@@ -33,11 +31,17 @@ const EditTourPage = ({ params }: { params: { id: string } }) => {
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
+    
+    const handleUpdateSuccess = async () => {
+        await fetch(`http://localhost:3001/api/tours/${id}`, { method: 'PUT' });
 
-    // Handle tour update success with redirection
-    const handleUpdateSuccess = () => {
-        router.push(`/tours/${id}`);  // Navigate back to the tour page after successful update
+        // Redirect to "updated" tour data page
+        router.push(`/tours/${id}/updated`);
     };
+    // // Handle tour update success with redirection
+    // const handleUpdateSuccess = () => {
+    //     router.push(`/tours/${id}`);  // Navigate back to the tour page after successful update
+    // };
 
     return <EditTour tourData={tour} onUpdateSuccess={handleUpdateSuccess} />;
 };
