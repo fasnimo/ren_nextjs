@@ -20,7 +20,8 @@ const ToursItemPage = ({ params }: { params: Params }) => {
     const { id } = params;
     const [tour, setTour] = useState<Tour | null>(null);
     const [error, setError] = useState<string | null>(null);
-
+    const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
+    
     // Fetch the tour data by ID
     const fetchTour = async () => {
         try {
@@ -49,6 +50,7 @@ const ToursItemPage = ({ params }: { params: Params }) => {
     const handleDelete = async () => {
         const confirmDelete = window.confirm('Are you sure you want to delete this tour?');
         if (confirmDelete) {
+            setDeleteLoading(true);
             try {
                 const response = await fetch(`http://localhost:3001/api/tours/${id}`, { method: 'DELETE' });
                 if (!response.ok) {
@@ -57,6 +59,8 @@ const ToursItemPage = ({ params }: { params: Params }) => {
                 router.push('/tours'); // Redirect to the tours list after deletion
             } catch (err) {
                 setError(err instanceof Error ? err.message : 'Failed to delete tour');
+            } finally {
+                setDeleteLoading(false);
             }
         }
     };
@@ -73,6 +77,7 @@ const ToursItemPage = ({ params }: { params: Params }) => {
                 tourPrice={tour.price}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
+                deleteLoading={deleteLoading} 
             />
         </div>
     );

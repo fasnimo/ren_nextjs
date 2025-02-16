@@ -1,14 +1,15 @@
-'use client'
+// ToursItem.tsx
 import React from 'react';
 
-interface ToursItemProps {
+export type ToursItemProps = {
   tourName: string;
   tourImage: string;
   tourInfo: string;
   tourPrice: string;
   onEdit: () => void;
   onDelete: () => void;
-}
+  deleteLoading?: boolean; // Add this line
+};
 
 const ToursItem = ({
   tourName,
@@ -17,32 +18,29 @@ const ToursItem = ({
   tourPrice,
   onEdit,
   onDelete,
+  deleteLoading = false,
 }: ToursItemProps) => {
   return (
-    <div className="p-5 border border-gray-300 rounded-lg shadow-sm mb-4">
-      <h1 className="text-xl font-bold mb-3">{tourName}</h1>
-      <img 
-        src={tourImage} 
-        alt={tourName} 
-        className="w-full h-auto rounded-lg mb-3"
-      />
-      <p className="text-gray-700 mb-3">{tourInfo}</p>
-      <p className="font-semibold text-gray-900">
-        <strong>Price:</strong> {tourPrice}
-      </p>
-
-      <div className="mt-4 flex space-x-3">
-        <button 
-          onClick={onEdit} 
-          className="px-4 py-2 bg-green-500 text-white rounded-md shadow hover:bg-green-600"
+    <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-lg space-y-4">
+      <img src={tourImage} alt={tourName} className="w-full h-auto rounded-md" />
+      <h2 className="text-2xl font-bold">{tourName}</h2>
+      <p>{tourInfo}</p>
+      <p className="text-xl font-semibold">Price: {tourPrice}</p>
+      <div className="flex space-x-4">
+        <button
+          onClick={onEdit}
+          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200"
         >
           Edit
         </button>
-        <button 
-          onClick={onDelete} 
-          className="px-4 py-2 bg-red-500 text-white rounded-md shadow hover:bg-red-600"
+        <button
+          onClick={onDelete}
+          disabled={deleteLoading}
+          className={`bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors duration-200 ${
+            deleteLoading ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
         >
-          Delete
+          {deleteLoading ? 'Deleting...' : 'Delete'}
         </button>
       </div>
     </div>
