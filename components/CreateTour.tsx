@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 type Tour = {
   id?: string; // id will be generated after creation
   name: string;
+  lastName: string; // NEW
   info: string;
   image: string;
   price: string;
@@ -12,11 +13,19 @@ type Tour = {
 
 const CreateTour = () => {
   const router = useRouter();
-  const [tour, setTour] = useState<Tour>({ name: '', info: '', image: '', price: '' });
+  const [tour, setTour] = useState<Tour>({
+    name: '',
+    lastName: '',
+    info: '',
+    image: '',
+    price: '',
+  });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setTour((prevTour) => ({ ...prevTour, [name]: value }));
   };
@@ -50,14 +59,22 @@ const CreateTour = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-lg space-y-6">
-      <h2 className="text-2xl font-semibold text-center text-gray-700">Add a Tour</h2>
-      
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-lg space-y-6"
+    >
+      <h2 className="text-2xl font-semibold text-center text-gray-700">
+        Add a Tour
+      </h2>
+
       {error && <div className="text-red-600 text-center">{error}</div>}
-      
+
       <div className="space-y-4">
+        {/* First Name */}
         <div>
-          <label htmlFor="name" className="block text-gray-600 font-medium">Name:</label>
+          <label htmlFor="name" className="block text-gray-600 font-medium">
+            First Name:
+          </label>
           <input
             type="text"
             id="name"
@@ -68,9 +85,28 @@ const CreateTour = () => {
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        
+
+        {/* Last Name */}
         <div>
-          <label htmlFor="info" className="block text-gray-600 font-medium">Info:</label>
+          <label htmlFor="lastName" className="block text-gray-600 font-medium">
+            Last Name:
+          </label>
+          <input
+            type="text"
+            id="lastName"
+            name="lastName"
+            value={tour.lastName}
+            onChange={handleChange}
+            required
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        {/* Info */}
+        <div>
+          <label htmlFor="info" className="block text-gray-600 font-medium">
+            Location Info:
+          </label>
           <textarea
             id="info"
             name="info"
@@ -80,9 +116,12 @@ const CreateTour = () => {
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        
+
+        {/* Image */}
         <div>
-          <label htmlFor="image" className="block text-gray-600 font-medium">Image URL:</label>
+          <label htmlFor="image" className="block text-gray-600 font-medium">
+            Image URL:
+          </label>
           <input
             type="text"
             id="image"
@@ -93,9 +132,12 @@ const CreateTour = () => {
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        
+
+        {/* Price */}
         <div>
-          <label htmlFor="price" className="block text-gray-600 font-medium">Price:</label>
+          <label htmlFor="price" className="block text-gray-600 font-medium">
+            Price:
+          </label>
           <input
             type="text"
             id="price"
@@ -107,11 +149,13 @@ const CreateTour = () => {
           />
         </div>
       </div>
-      
+
       <button
         type="submit"
         disabled={loading}
-        className={`w-full py-3 text-white rounded-md font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
+        className={`w-full py-3 text-white rounded-md font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ${
+          loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+        }`}
       >
         {loading ? 'Creating...' : 'Create Tour'}
       </button>
