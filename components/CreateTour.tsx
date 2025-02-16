@@ -51,7 +51,7 @@ const CreateTour = () => {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-lg space-y-6">
-      <h2 className="text-2xl font-semibold text-center text-gray-700">Create Tour</h2>
+      <h2 className="text-2xl font-semibold text-center text-gray-700">Add a Tour</h2>
       
       {error && <div className="text-red-600 text-center">{error}</div>}
       

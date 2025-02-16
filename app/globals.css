@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background: gainsboro;
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-green-100 to-blue-100;
+  }
 }
