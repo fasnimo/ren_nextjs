@@ -3,9 +3,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 type Tour = {
-  id?: string; // id will be generated after creation
+  id?: string;
   name: string;
-  lastName: string; // NEW
+  lastName: string;
+  tourName: string; // Moved after lastName
   info: string;
   image: string;
   price: string;
@@ -16,6 +17,7 @@ const CreateTour = () => {
   const [tour, setTour] = useState<Tour>({
     name: '',
     lastName: '',
+    tourName: '',
     info: '',
     image: '',
     price: '',
@@ -49,7 +51,6 @@ const CreateTour = () => {
       }
 
       const newTour = await response.json();
-      // Redirect to the new tour's page (or any confirmation page)
       router.push(`/tours/${newTour.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
@@ -102,10 +103,26 @@ const CreateTour = () => {
           />
         </div>
 
+        {/* Tour Name */}
+        <div>
+          <label htmlFor="tourName" className="block text-gray-600 font-medium">
+            Tour Name:
+          </label>
+          <input
+            type="text"
+            id="tourName"
+            name="tourName"
+            value={tour.tourName}
+            onChange={handleChange}
+            required
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
         {/* Info */}
         <div>
           <label htmlFor="info" className="block text-gray-600 font-medium">
-            Location Info:
+            Tour Details:
           </label>
           <textarea
             id="info"

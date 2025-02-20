@@ -59,7 +59,7 @@ const EditTour = ({ tourData, onUpdateSuccess }: { tourData: Tour | null, onUpda
       
       <div className="space-y-4">
         <div>
-          <label htmlFor="name" className="block text-gray-600 font-medium">Name:</label>
+          <label htmlFor="name" className="block text-gray-600 font-medium">Tours Name:</label>
           <input
             type="text"
             id="name"
@@ -72,7 +72,7 @@ const EditTour = ({ tourData, onUpdateSuccess }: { tourData: Tour | null, onUpda
         </div>
         
         <div>
-          <label htmlFor="info" className="block text-gray-600 font-medium">Info:</label>
+          <label htmlFor="info" className="block text-gray-600 font-medium">Tour Details:</label>
           <textarea
             id="info"
             name="info"
