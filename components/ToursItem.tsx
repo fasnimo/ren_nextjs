@@ -7,7 +7,7 @@ export type ToursItemProps = {
   tourInfo: string;
   tourPrice: string;
   onEdit: () => void;
-  onDelete: () => void;
+  onDelete?: () => void;
   deleteLoading?: boolean; // Add this line
 };
 
@@ -33,15 +33,17 @@ const ToursItem = ({
         >
           Edit
         </button>
-        <button
-          onClick={onDelete}
-          disabled={deleteLoading}
-          className={`bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors duration-200 ${
-            deleteLoading ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
-        >
-          {deleteLoading ? 'Deleting...' : 'Delete'}
-        </button>
+        {onDelete && (
+            <button
+              onClick={onDelete}
+              disabled={deleteLoading}
+              className={`bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors duration-200 ${
+                deleteLoading ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+            >
+              {deleteLoading ? 'Deleting...' : 'Delete'}
+            </button>
+        )}
       </div>
     </div>
   );

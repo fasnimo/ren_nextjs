@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ToursItem from '@/components/ToursItem';
+import { useSession } from 'next-auth/react';
+
 
 type Params = {
     id: string;
@@ -21,6 +23,8 @@ const ToursItemPage = ({ params }: { params: Params }) => {
     const [tour, setTour] = useState<Tour | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
+    const { data: session, status } = useSession();
+
     
     // Fetch the tour data by ID
     const fetchTour = async () => {
@@ -48,23 +52,40 @@ const ToursItemPage = ({ params }: { params: Params }) => {
 
     // Handle the delete action
     const handleDelete = async () => {
-        const confirmDelete = window.confirm('Are you sure you want to delete this tour?');
-        if (confirmDelete) {
-            setDeleteLoading(true);
-            try {
-                const response = await fetch(`http://localhost:3001/api/tours/${id}`, { method: 'DELETE' });
-                if (!response.ok) {
-                    throw new Error('Failed to delete tour');
-                }
-                router.push('/tours'); // Redirect to the tours list after deletion
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to delete tour');
-            } finally {
-                setDeleteLoading(false);
-            }
+        if (status === 'loading') {
+          alert('Still checking login status...');
+          return;
         }
-    };
-
+      
+        if (!session) {
+          alert('You must be logged in to delete a tour.');
+          return;
+        }
+      
+        const confirmDelete = window.confirm('Are you sure you want to delete this tour?');
+        if (!confirmDelete) return;
+      
+        setDeleteLoading(true);
+        try {
+          const response = await fetch(`http://localhost:3001/api/tours/${id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+      
+          if (!response.ok) {
+            throw new Error('Failed to delete tour');
+          }
+      
+          router.push('/tours');
+        } catch (err) {
+          setError(err instanceof Error ? err.message : 'Failed to delete tour');
+        } finally {
+          setDeleteLoading(false);
+        }
+      };
+      
     if (error) return <div>Error: {error}</div>;
     if (!tour) return <div>Loading...</div>;
 
@@ -76,8 +97,8 @@ const ToursItemPage = ({ params }: { params: Params }) => {
                 tourInfo={tour.info}
                 tourPrice={tour.price}
                 onEdit={handleEdit}
-                onDelete={handleDelete}
-                deleteLoading={deleteLoading} 
+                onDelete={session ? handleDelete : undefined}
+                deleteLoading={deleteLoading}
             />
         </div>
     );
