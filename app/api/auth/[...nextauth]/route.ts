@@ -10,14 +10,13 @@ const handler = NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        // Replace this with actual DB logic later
-        const validUsername = 'admin';
-        const validPassword = 'password';
+        console.log('🚪 Received login attempt:', credentials);
 
         if (
-          credentials?.username === validUsername &&
-          credentials?.password === validPassword
+          credentials?.username === 'admin' &&
+          credentials?.password === 'password'
         ) {
+          console.log('✅ Logged in as admin');
           return {
             id: '1',
             name: 'Admin',
@@ -25,6 +24,7 @@ const handler = NextAuth({
           };
         }
 
+        console.log('❌ Invalid credentials');
         return null;
       },
     }),

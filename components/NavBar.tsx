@@ -6,7 +6,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 
 function NavBar() {
   const { data: session, status } = useSession();
-
+  // console.log(session)
   return (
     <nav className="max-w-3xl mx-auto py-4 px-6 flex gap-x-8 items-center border-b border-gray-300">
       <Link 
